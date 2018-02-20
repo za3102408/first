@@ -15,10 +15,10 @@ namespace VerivoxTask
             var tariffComparer = new TariffComparer();
             var tariffList = tariffComparer.GetTariffList(currentConsumption);
 
-            CompareTariffs(tariffList, currentConsumption);
+            DisplayComparison(tariffList, currentConsumption);
         }
 
-        public static void CompareTariffs(IEnumerable<ITariff> tariffs, int kWh)
+        private static void DisplayComparison(IEnumerable<ITariff> tariffs, int kWh)
         {
             Console.WriteLine($"Consumption: {kWh}");
             foreach (var tariff in tariffs)
