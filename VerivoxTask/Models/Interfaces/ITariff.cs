@@ -7,6 +7,6 @@ namespace VerivoxTask.Models.Interfaces
     interface ITariff
     {
         string TariffName { get; }
-        decimal CalculateAnnualCosts(int kWh);
+        decimal AnnualCosts { get; }
     }
 }

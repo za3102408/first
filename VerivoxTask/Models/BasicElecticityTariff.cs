@@ -9,19 +9,26 @@ namespace VerivoxTask.Models
     public class BasicElecticityTariff : ITariff
     {
         readonly string tariffName = "BasicElecticityTariff";
-        readonly decimal CentPerkWh = 0.22M;
+        readonly decimal centPerkWh = 0.22M;
         readonly decimal baseCostsPerMonth = 5M;
+        private decimal annualCosts;
 
-
-        public string TariffName => this.tariffName;
-        public decimal CalculateAnnualCosts(int kWh)
+        public BasicElecticityTariff(int consumption)
         {
-            if(kWh <= 0)
+            this.annualCosts = CalculateAnnualCosts(consumption);
+        }
+
+        public decimal AnnualCosts => this.annualCosts;
+        public string TariffName => this.tariffName;
+
+        private decimal CalculateAnnualCosts(int kWh)
+        {
+            if(kWh < 0)
             {
-                return 12 * baseCostsPerMonth;
+                throw new ArgumentException("Consumption can't be lower than zero.");
             }
-            decimal AnnualCosts = baseCostsPerMonth * 12 + kWh * CentPerkWh;
-            return AnnualCosts;
+            decimal annualCost = baseCostsPerMonth * 12 + kWh * centPerkWh;
+            return annualCost;
         }
     }
 }

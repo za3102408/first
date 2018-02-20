@@ -9,19 +9,26 @@ namespace VerivoxTask.Models
     public class PackagedTariff : ITariff
     {
         readonly string tariffName = "PackagedTariff";
-        readonly decimal CentPerkWh = 0.30M;
+        readonly decimal centPerkWh = 0.30M;
         readonly decimal baseCostsPerYear = 800M;
+        private decimal annualCosts;
 
+        public PackagedTariff(int consumption)
+        {
+            this.annualCosts = CalculateAnnualCosts(consumption);
+        }
 
+        public decimal AnnualCosts => this.annualCosts;
         public string TariffName => this.tariffName;
-        public decimal CalculateAnnualCosts(int kWh)
+
+        private decimal CalculateAnnualCosts(int kWh)
         {
             if (kWh <= 4000)
             {
                 return baseCostsPerYear;
             }
-            decimal AnnualCosts = baseCostsPerYear + ((kWh - 4000) * CentPerkWh);
-            return AnnualCosts;
+            decimal annualCost = baseCostsPerYear + ((kWh - 4000) * centPerkWh);
+            return annualCost;
         }
     }
 }

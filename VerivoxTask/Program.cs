@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using VerivoxTask.Models;
 using VerivoxTask.Models.Interfaces;
 
@@ -9,29 +11,28 @@ namespace VerivoxTask
     {
         static void Main(string[] args)
         {
-
-            //Console.WriteLine("Hello World!");
             var currentConsumption = 6000;
-            var tariffsList = GetTariffList();
-            CompareConsumtion(tariffsList, currentConsumption);
+            CompareTariffs(currentConsumption);
         }
-        private static IEnumerable<ITariff> GetTariffList()
+        private static IEnumerable<ITariff> GetTariffList(int consumption)
         {
             var tariffsList = new List<ITariff>()
             {
-                new BasicElecticityTariff(),
-                new PackagedTariff()
+                new BasicElecticityTariff(consumption),
+                new PackagedTariff(consumption)
             };
-            return tariffsList;
+            return tariffsList.OrderBy(t => t.AnnualCosts);
 
         }
 
-        private static void CompareConsumtion(IEnumerable<ITariff> tariffs, int kWh)
+        private static void CompareTariffs(int kWh)
         {
-            foreach (var tariff in tariffs)
+            Console.WriteLine($"Consumption: {kWh}");
+
+            var sortedTariffs = GetTariffList(kWh);
+            foreach (var tariff in sortedTariffs)
             {
-                Console.WriteLine($"Tariff Name: {tariff.TariffName}.");
-                Console.WriteLine($"\tTariff Costs: {tariff.CalculateAnnualCosts(kWh)} Euro.\n");
+                Console.WriteLine($"Tariff Name: {tariff.TariffName}.\nTariff Costs: {tariff.AnnualCosts:N2} Euro.\n");
             }
         }
     }
