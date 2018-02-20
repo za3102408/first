@@ -12,25 +12,16 @@ namespace VerivoxTask
         static void Main(string[] args)
         {
             var currentConsumption = 6000;
-            CompareTariffs(currentConsumption);
-        }
-        private static IEnumerable<ITariff> GetTariffList(int consumption)
-        {
-            var tariffsList = new List<ITariff>()
-            {
-                new BasicElecticityTariff(consumption),
-                new PackagedTariff(consumption)
-            };
-            return tariffsList.OrderBy(t => t.AnnualCosts);
+            var tariffComparer = new TariffComparer();
+            var tariffList = tariffComparer.GetTariffList(currentConsumption);
 
+            CompareTariffs(tariffList, currentConsumption);
         }
 
-        private static void CompareTariffs(int kWh)
+        public static void CompareTariffs(IEnumerable<ITariff> tariffs, int kWh)
         {
             Console.WriteLine($"Consumption: {kWh}");
-
-            var sortedTariffs = GetTariffList(kWh);
-            foreach (var tariff in sortedTariffs)
+            foreach (var tariff in tariffs)
             {
                 Console.WriteLine($"Tariff Name: {tariff.TariffName}.\nTariff Costs: {tariff.AnnualCosts:N2} Euro.\n");
             }
